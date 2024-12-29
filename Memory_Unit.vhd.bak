@@ -1,0 +1,40 @@
+-- 16-bit Memory Unit (RAM) in VHDL
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity memory_unit is
+    Port ( clk     : in  STD_LOGIC;        -- Clock signal
+           reset   : in  STD_LOGIC;        -- Reset signal
+           we      : in  STD_LOGIC;        -- Write enable
+           addr    : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit address for 16 locations
+           data_in : in  STD_LOGIC_VECTOR(15 downto 0); -- Data input (16 bits)
+           data_out: out STD_LOGIC_VECTOR(15 downto 0)  -- Data output (16 bits)
+         );
+end memory_unit;
+
+architecture Behavioral of memory_unit is
+
+    -- Define the memory as an array of 16-bit registers
+    type memory_array is array (0 to 15) of STD_LOGIC_VECTOR(15 downto 0);
+    signal mem : memory_array := (others => (others => '0'));  -- Initialize memory with 0s
+
+begin
+
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            -- If reset is active, clear memory
+            mem <= (others => (others => '0'));
+        elsif rising_edge(clk) then
+            -- If write enable is active, write data to memory
+            if we = '1' then
+                mem(to_integer(unsigned(addr))) <= data_in;
+            end if;
+            -- Always output the data at the address
+            data_out <= mem(to_integer(unsigned(addr)));
+        end if;
+    end process;
+
+end Behavioral;

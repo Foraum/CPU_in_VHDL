@@ -1,0 +1,27 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity register_16bit is
+	port(
+		en			: in std_logic;
+		data_in	: in std_logic_vector(15 downto 0);
+		data_out : out std_logic_vector(15 downto 0);
+	);
+end entity;
+
+architecture rtl of register_16bit is
+signal data_temp : std_logic_vector(15 downto 0):=(others => '0');
+begin
+
+data_out <= data_temp;
+
+input_proc: process(data_in)
+begin
+	if en ='1' then
+		data_temp <= data_in;
+	end if;
+end process;
+
+end architecture;

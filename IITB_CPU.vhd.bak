@@ -1,0 +1,45 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity ALU is
+	port(
+		A	in		:std_logic_vector(15 downto 0);
+		B	in		:std_logic_vector(15 downto 0);
+		M	in		:std_logic_vector(3 downto 0);
+		C	out	:std_logic_vector(15 downto 0);
+	);
+end entity;
+
+architecture rtl of ALU is
+
+begin
+	function ADD (
+		A : in std_logic_vector(15 downto 0);
+		B : in std_logic_vector(15 downto 0)
+		) return std_logic_vector is
+		variable sum : std_logic_vector(15 downto 0);
+		variable carry: std_logic;
+	begin
+		sum <= std_logic_vector(unsigned(A) + unsigned(B));
+	end ADD;
+	
+	function SUB (
+		A : in std_logic_vector(15 downto 0);
+		B : in std_logic_vector(15 downto 0)
+		) return std_logic_vector is
+		variable diff : std_logic_vector(15 downto 0);
+		variable borrow: std_logic;
+	begin
+	     -- Subtract A and B using unsigned conversion
+        -- Convert to unsigned, subtract, and return result as STD_LOGIC_VECTOR
+        diff <= std_logic_vector(unsigned(A) - unsigned(B));
+
+        -- Set Borrow flag if A < B (indicating an underflow)
+        if unsigned(A) < unsigned(B) then
+            borrow <= '1';
+        else
+            borrow <= '0';
+	end SUB;
+end architecture;
